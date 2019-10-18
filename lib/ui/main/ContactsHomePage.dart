@@ -11,13 +11,9 @@ class ContactsHomePage extends StatefulWidget {
 }
 
 class _ContactsHomePageState extends State<ContactsHomePage> {
-
   int currentTabIndex = 0;
 
-  List<Widget> tabs = [
-    ContactsListTab(),
-    ContactsFavTab()
-  ];
+  List<Widget> tabs = [ContactsListTab(), ContactsFavTab()];
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +27,11 @@ class _ContactsHomePageState extends State<ContactsHomePage> {
         tooltip: 'Add Contact',
         child: Icon(Icons.add),
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         items: [
+          BottomNavigationBarItem(icon: Icon(Icons.people), title: Text("All")),
           BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              title: Text("All")
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.star),
-              title: Text("Favourites")
-          ),
+              icon: Icon(Icons.star), title: Text("Favourites")),
         ],
         onTap: onTapped,
         currentIndex: currentTabIndex,
@@ -49,9 +39,11 @@ class _ContactsHomePageState extends State<ContactsHomePage> {
     );
   }
 
-  void _addContact() {}
+  void _addContact() {
+    Navigator.of(context).pushNamed('/new_contact', arguments: null);
+  }
 
-  onTapped(int index){
+  onTapped(int index) {
     setState(() {
       currentTabIndex = index;
     });
