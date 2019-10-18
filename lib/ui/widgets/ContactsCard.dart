@@ -66,7 +66,7 @@ class ContactsCard extends StatelessWidget {
           ],
         ),
       ),
-      key: Key(contact.hashCode.toString()),
+      key: Key(UniqueKey().toString()),
       child: Card(
         child: ListTile(
           title: Text('${contact.firstName} ${contact.lastName}'),

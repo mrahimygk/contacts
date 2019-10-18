@@ -72,7 +72,8 @@ class ContactsRepositoryImpl implements ContactsRepository {
   @override
   Future<Contact> insert(Contact data) async {
     final db = await databaseProvider.db();
-    data.id = await db.insert(contactsTable, dao.toMap(data), conflictAlgorithm: ConflictAlgorithm.replace);
+    data.id = await db.insert(contactsTable, dao.toMap(data),
+        conflictAlgorithm: ConflictAlgorithm.replace);
     return data;
   }
 
@@ -82,6 +83,10 @@ class ContactsRepositoryImpl implements ContactsRepository {
     await db.update(contactsTable, dao.toMap(data),
         where: '$contactsColumnId = ?', whereArgs: [data.id]);
     return data;
+  }
+
+  Future removeContact(Contact c) async {
+    return await dio.delete("$CONTACTS_URL/${c.id.toString()}");
   }
 }
 

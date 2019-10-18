@@ -30,12 +30,44 @@ class _ContactsListTabState extends State<ContactsListTab> {
               child: CircularProgressIndicator(),
             );
           }
-
+          final data = inStream.data;
+          data.sort((a, b) => a.id.hashCode.compareTo(b.id.hashCode));
           return ListView(
             controller: scrollController,
             padding: EdgeInsets.all(6.0),
-            children: inStream.data
-                .map((contact) => ContactsCard(contact: contact))
+            children: data
+                .map((contact) => ContactsCard(
+                      contact: contact,
+                      onEdit: (c) {
+                        print('editing $c');
+                      },
+                      onRemove: (c) {
+                        cRepo.removeContact(c).then((f) {
+                          cRepo.delete(c).then((cn) {
+                            setState(() {});
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Text(
+                                        'Contact ${c.firstName} ${c.lastName} removed'),
+                                  ),
+                                  Expanded(
+                                    child: FlatButton(
+                                      child: Text('Undo'),
+                                      onPressed: () {
+                                        cRepo.insert(c);
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ));
+                          });
+                        });
+                      },
+                    ))
                 .toList(),
           );
         });
