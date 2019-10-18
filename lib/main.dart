@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'ui/main/ContactsHomePage.dart';
-
+import 'ui/add/AddContactPage.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -12,7 +12,8 @@ class MyApp extends StatelessWidget {
       home: ContactsHomePage(title: 'Contact Manager Home Page'),
       routes: <String, WidgetBuilder>{
         '/home': (BuildContext inContext) =>
-            ContactsHomePage(title: 'Contact Manager Home Page')
+            ContactsHomePage(title: 'Contact Manager Home Page'),
+        '/new_contact': (BuildContext inContext) => AddContactPage(),
       },
     );
   }
