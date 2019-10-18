@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firstsourceio/data/Contact.dart';
+import 'package:flutter_firstsourceio/data/model/Contact.dart';
 import 'package:flutter_firstsourceio/db/provider/DatabaseProvider.dart';
 import 'package:flutter_firstsourceio/db/repo/ContactsRepositoryImpl.dart';
 import 'package:flutter_firstsourceio/ui/widgets/ContactsCard.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter_firstsourceio/data/Contact.dart';
+import 'package:flutter_firstsourceio/data/model/Contact.dart';
 import 'package:flutter_firstsourceio/db/dao/Dao.dart';
 
 class ContactsDao implements Dao<Contact> {

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_firstsourceio/data/Contact.dart';
+import 'package:flutter_firstsourceio/data/model/Contact.dart';
 import 'package:flutter/material.dart';
 
 class ContactsCard extends StatelessWidget {
