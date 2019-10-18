@@ -67,106 +67,63 @@ class _ContactsListTabState extends State<ContactsListTab> {
                 child: ListView(
                   controller: scrollController,
                   padding: EdgeInsets.all(6.0),
-                  children: data
-                      .map((contact) => filter == null || filter == ""
-                          ? ContactsCard(
-                              contact: contact,
-                              onEdit: (c) {
-                                print('editing $c');
-                              },
-                              onRemove: (theRemovingContact) {
-                                contactsRepo
-                                    .removeContactApi(theRemovingContact)
-                                    .then((f) {
-                                  contactsRepo
-                                      .delete(theRemovingContact)
-                                      .then((cn) {
-                                    setState(() {});
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                      content: Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Text(
-                                                'Contact ${theRemovingContact.firstName} ${theRemovingContact.lastName} removed'),
-                                          ),
-                                          Expanded(
-                                            child: FlatButton(
-                                              child: Text('Undo'),
-                                              onPressed: () {
-                                                contactsRepo
-                                                    .insert(theRemovingContact)
-                                                    .then((g) {
-                                                  contactsRepo.insertApi(
-                                                      theRemovingContact);
-                                                });
-                                                setState(() {});
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ));
-                                  });
-                                });
-                              },
-                            )
-                          : contact.firstName
-                                      .toLowerCase()
-                                      .contains(filter.toLowerCase()) ||
-                                  contact.lastName
-                                      .toLowerCase()
-                                      .contains(filter.toLowerCase()) ||
-                                  contact.email
-                                      .toLowerCase()
-                                      .contains(filter.toLowerCase()) ||
-                                  contact.phoneNo
-                                      .toLowerCase()
-                                      .contains(filter.toLowerCase())
-                              ? ContactsCard(
-                                  contact: contact,
-                                  onEdit: (c) {
-                                    print('editing $c');
-                                  },
-                                  onRemove: (theRemovingContact) {
-                                    contactsRepo
-                                        .removeContactApi(theRemovingContact)
-                                        .then((f) {
-                                      contactsRepo
-                                          .delete(theRemovingContact)
-                                          .then((cn) {
+                  children: data.map((contact) {
+                    final card = ContactsCard(
+                      contact: contact,
+                      onEdit: (c) {
+                        print('editing $c');
+                      },
+                      onRemove: (theRemovingContact) {
+                        contactsRepo
+                            .removeContactApi(theRemovingContact)
+                            .then((f) {
+                          contactsRepo.delete(theRemovingContact).then((cn) {
+                            setState(() {});
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Text(
+                                        'Contact ${theRemovingContact.firstName} ${theRemovingContact.lastName} removed'),
+                                  ),
+                                  Expanded(
+                                    child: FlatButton(
+                                      child: Text('Undo'),
+                                      onPressed: () {
+                                        contactsRepo
+                                            .insert(theRemovingContact)
+                                            .then((g) {
+                                          contactsRepo
+                                              .insertApi(theRemovingContact);
+                                        });
                                         setState(() {});
-                                        Scaffold.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Row(
-                                            children: <Widget>[
-                                              Expanded(
-                                                child: Text(
-                                                    'Contact ${theRemovingContact.firstName} ${theRemovingContact.lastName} removed'),
-                                              ),
-                                              Expanded(
-                                                child: FlatButton(
-                                                  child: Text('Undo'),
-                                                  onPressed: () {
-                                                    contactsRepo
-                                                        .insert(
-                                                            theRemovingContact)
-                                                        .then((g) {
-                                                      contactsRepo.insertApi(
-                                                          theRemovingContact);
-                                                    });
-                                                    setState(() {});
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ));
-                                      });
-                                    });
-                                  },
-                                )
-                              : Container())
-                      .toList(),
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ));
+                          });
+                        });
+                      },
+                    );
+                    filter == null || filter == ""
+                        ? card
+                        : contact.firstName
+                                    .toLowerCase()
+                                    .contains(filter.toLowerCase()) ||
+                                contact.lastName
+                                    .toLowerCase()
+                                    .contains(filter.toLowerCase()) ||
+                                contact.email
+                                    .toLowerCase()
+                                    .contains(filter.toLowerCase()) ||
+                                contact.phoneNo
+                                    .toLowerCase()
+                                    .contains(filter.toLowerCase())
+                            ? card
+                            : Container();
+                  }).toList(),
                 ),
               ),
             ],
