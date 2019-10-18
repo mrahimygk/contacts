@@ -93,6 +93,11 @@ class ContactsRepositoryImpl implements ContactsRepository {
     final inserted =  await dio.post(CONTACTS_URL, data: data.toMap());
     return inserted.data;
   }
+
+  Future updateApi(Contact data) async {
+    final inserted =  await dio.put("$CONTACTS_URL/${data.id.toString()}", data: data.toMap());
+    return inserted.data;
+  }
 }
 
 const CONTACTS_URL = "https://mock-rest-api-server.herokuapp.com/api/v1/user";
