@@ -107,7 +107,7 @@ class _ContactsListTabState extends State<ContactsListTab> {
                         });
                       },
                     );
-                    filter == null || filter == ""
+                    return filter == null || filter == ""
                         ? card
                         : contact.firstName
                                     .toLowerCase()
