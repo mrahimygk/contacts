@@ -28,17 +28,25 @@ class _AddContactPageState extends State<AddContactPage> {
 
   bool _isLoading = false;
 
+  Contact editingContact;
+
+  bool hasSetState = false;
+
   @override
   Widget build(BuildContext context) {
     final AddContactArgs arguments = ModalRoute.of(context).settings.arguments;
     final contact = arguments?.contact;
-
-    if (contact != null)
+    if (contact != null && !hasSetState) {
+      hasSetState = true;
       setState(() {
+        editingContact = contact;
         _firstNameController.text = contact.firstName;
         _lastNameController.text = contact.lastName;
         _phoneController.text = contact.phoneNo;
+        _emailController.text = contact.email;
+        _dobController.text = contact.dateOfBirth;
       });
+    }
 
     return Scaffold(
       key: scaffoldKey,
@@ -189,24 +197,56 @@ class _AddContactPageState extends State<AddContactPage> {
     setState(() {
       _isLoading = true;
     });
-    contactsRepo.insertApi(contact).then((insertedRaw) {
-      final inserted = Contact.fromMap(insertedRaw);
-      setState(() {
-        _isLoading = false;
-      });
 
-      (scaffoldKey.currentState as ScaffoldState).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: <Widget>[
-              Expanded(
-                child: Text('Contact $_firstName $_lastName inserted'),
-              ),
-            ],
+    if (editingContact.id == null) {
+      contactsRepo.insertApi(contact).then((insertedRaw) {
+        final inserted = Contact.fromMap(insertedRaw);
+        if (inserted != null) contactsRepo.insert(inserted);
+        setState(() {
+          _isLoading = false;
+        });
+
+        (scaffoldKey.currentState as ScaffoldState).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text('Contact $_firstName $_lastName inserted'),
+                ),
+              ],
+            ),
           ),
-        ),
+        );
+      });
+    } else {
+      final editedContact = Contact(
+        id: editingContact.id,
+        dateOfBirth: contact.dateOfBirth,
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        email: contact.email,
+        gender: "Male",
+        phoneNo: contact.phoneNo,
       );
-    });
+      contactsRepo.updateApi(editedContact).then((insertedRaw) {
+        contactsRepo.update(editedContact);
+        setState(() {
+          _isLoading = false;
+        });
+
+        (scaffoldKey.currentState as ScaffoldState).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text('Contact $_firstName $_lastName updated'),
+                ),
+              ],
+            ),
+          ),
+        );
+      });
+    }
   }
 
   Future _pickImage() async {
