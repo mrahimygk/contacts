@@ -21,6 +21,19 @@ class _ContactsListPageState extends State<ContactsListPage> {
         tooltip: 'Add Contact',
         child: Icon(Icons.add),
       ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.people),
+              title: Text("All")
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.star),
+              title: Text("Favourites")
+          ),
+        ],
+      ),
     );
   }
 
