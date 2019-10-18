@@ -9,7 +9,6 @@ class ContactsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Card(
       child: ListTile(
         title: Text(contact.firstName),

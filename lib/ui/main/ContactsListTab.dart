@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firstsourceio/data/Contact.dart';
 import 'package:flutter_firstsourceio/db/provider/DatabaseProvider.dart';
 import 'package:flutter_firstsourceio/db/repo/ContactsRepositoryImpl.dart';
+import 'package:flutter_firstsourceio/ui/widgets/ContactsCard.dart';
 
 class ContactsListTab extends StatefulWidget {
   _ContactsListTabState createState() => _ContactsListTabState();
@@ -34,14 +35,14 @@ class _ContactsListTabState extends State<ContactsListTab> {
             controller: scrollController,
             padding: EdgeInsets.all(6.0),
             children: inStream.data
-                .map((contact) => Dismissible(
-                      key: Key(contact.hashCode.toString()),
-                      child: Card(
-                        child: ListTile(
-                          title: Text(contact.firstName),
-                        ),
-                      ),
-                    ))
+                .map(
+                  (contact) => Dismissible(
+                    key: Key(contact.hashCode.toString()),
+                    child: ContactsCard(
+                      contact: contact,
+                    ),
+                  ),
+                )
                 .toList(),
           );
         });
