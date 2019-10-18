@@ -56,7 +56,7 @@ class _ContactsListTabState extends State<ContactsListTab> {
                             },
                             onRemove: (theRemovingContact) {
                               contactsRepo
-                                  .removeContact(theRemovingContact)
+                                  .removeContactApi(theRemovingContact)
                                   .then((f) {
                                 contactsRepo
                                     .delete(theRemovingContact)
