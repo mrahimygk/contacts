@@ -32,50 +32,68 @@ class _ContactsListTabState extends State<ContactsListTab> {
           }
           final data = inStream.data;
           data.sort((a, b) => a.firstName.compareTo(b.firstName));
-          return ListView(
-            controller: scrollController,
-            padding: EdgeInsets.all(6.0),
-            children: data
-                .map((contact) => ContactsCard(
-                      contact: contact,
-                      onEdit: (c) {
-                        print('editing $c');
-                      },
-                      onRemove: (theRemovingContact) {
-                        contactsRepo
-                            .removeContact(theRemovingContact)
-                            .then((f) {
-                          contactsRepo.delete(theRemovingContact).then((cn) {
-                            setState(() {});
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                              content: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text(
-                                        'Contact ${theRemovingContact.firstName} ${theRemovingContact.lastName} removed'),
-                                  ),
-                                  Expanded(
-                                    child: FlatButton(
-                                      child: Text('Undo'),
-                                      onPressed: () {
-                                        contactsRepo
-                                            .insert(theRemovingContact)
-                                            .then((g) {
-                                          contactsRepo
-                                              .insertApi(theRemovingContact);
-                                        });
-                                        setState(() {});
-                                      },
+          return Stack(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+                child: TextField(
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                    hintText: 'Type to Search...',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 48.0),
+                child: ListView(
+                  controller: scrollController,
+                  padding: EdgeInsets.all(6.0),
+                  children: data
+                      .map((contact) => ContactsCard(
+                            contact: contact,
+                            onEdit: (c) {
+                              print('editing $c');
+                            },
+                            onRemove: (theRemovingContact) {
+                              contactsRepo
+                                  .removeContact(theRemovingContact)
+                                  .then((f) {
+                                contactsRepo
+                                    .delete(theRemovingContact)
+                                    .then((cn) {
+                                  setState(() {});
+                                  Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Text(
+                                              'Contact ${theRemovingContact.firstName} ${theRemovingContact.lastName} removed'),
+                                        ),
+                                        Expanded(
+                                          child: FlatButton(
+                                            child: Text('Undo'),
+                                            onPressed: () {
+                                              contactsRepo
+                                                  .insert(theRemovingContact)
+                                                  .then((g) {
+                                                contactsRepo.insertApi(
+                                                    theRemovingContact);
+                                              });
+                                              setState(() {});
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ));
-                          });
-                        });
-                      },
-                    ))
-                .toList(),
+                                  ));
+                                });
+                              });
+                            },
+                          ))
+                      .toList(),
+                ),
+              ),
+            ],
           );
         });
   }
