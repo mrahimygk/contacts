@@ -2,9 +2,22 @@ import 'package:flutter_firstsourceio/data/Contact.dart';
 import 'package:flutter_firstsourceio/db/dao/ContactsDao.dart';
 import 'package:flutter_firstsourceio/db/provider/DatabaseProvider.dart';
 import 'package:flutter_firstsourceio/db/repo/ContactsRepository.dart';
+import 'package:dio/dio.dart';
 
 class ContactsRepositoryImpl implements ContactsRepository {
   final dao = ContactsDao();
+
+  final contactsPerPage= 10;
+  int contactsPage = 1;
+
+  final dio = Dio(
+    BaseOptions(
+      method: "GET",
+      headers: {
+        "x-api-key": "i think there is no api key provided by firstsource.io"
+      },
+    ),
+  );
 
   @override
   DatabaseProvider databaseProvider;
@@ -42,8 +55,16 @@ class ContactsRepositoryImpl implements ContactsRepository {
   }
 
   @override
-  Future<List<Contact>> getContactsFromNetwork() {
-    // TODO: implement getNotesFromNetwork
+  Future<List<Contact>> getContactsFromNetwork() async {
+    final response = await dio.get(CONTACTS_URL,
+        queryParameters: {"page": contactsPage++, "row": contactsPerPage});
+    print(response);
+    var data = List<Contact>();
+    for (var value in response.data['data']) {
+      print(value);
+      data.add(Contact.fromMap(value));
+    }
+
     return null;
   }
 
@@ -62,3 +83,5 @@ class ContactsRepositoryImpl implements ContactsRepository {
     return data;
   }
 }
+
+const CONTACTS_URL = "https://mock-rest-api-server.herokuapp.com/api/v1/user/";
