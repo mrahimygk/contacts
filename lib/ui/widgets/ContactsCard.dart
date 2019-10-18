@@ -12,14 +12,6 @@ class ContactsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      confirmDismiss: (direction) async {
-        if (direction == DismissDirection.endToStart) {
-          return false;
-        } else if (direction == DismissDirection.startToEnd) {
-          return true;
-        }
-        return false;
-      },
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
           onEdit(contact);
