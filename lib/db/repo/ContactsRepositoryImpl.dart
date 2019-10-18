@@ -90,7 +90,8 @@ class ContactsRepositoryImpl implements ContactsRepository {
   }
 
   Future insertApi(Contact data) async {
-    return await dio.post(CONTACTS_URL, data: data.toMap());
+    final inserted =  await dio.post(CONTACTS_URL, data: data.toMap());
+    return inserted.data;
   }
 }
 
