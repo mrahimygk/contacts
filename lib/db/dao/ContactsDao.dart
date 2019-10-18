@@ -10,7 +10,7 @@ class ContactsDao implements Dao<Contact> {
       '$contactsColumnEmail text, '
       '$contactsColumnGender text, '
       '$contactsColumnDateOfBirth text, '
-      '$contactsColumnPhoneNo text, '
+      '$contactsColumnPhoneNo text '
       ')';
 
   @override
