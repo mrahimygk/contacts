@@ -4,18 +4,20 @@ import 'package:flutter/material.dart';
 
 class ContactsCard extends StatelessWidget {
   final Contact contact;
+  final Function(Contact contact) onRemove;
+  final Function(Contact contact) onEdit;
 
-  const ContactsCard({Key key, this.contact}) : super(key: key);
+  const ContactsCard({Key key, this.contact, this.onRemove, this.onEdit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
-          //TODO: edit
+          onEdit(contact);
         }
         if (direction == DismissDirection.startToEnd) {
-          //TODO: remove
+          onRemove(contact);
         }
       },
       background: Padding(
