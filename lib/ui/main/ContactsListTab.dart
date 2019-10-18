@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firstsourceio/data/args/AddContactArgs.dart';
 import 'package:flutter_firstsourceio/data/model/Contact.dart';
 import 'package:flutter_firstsourceio/db/provider/DatabaseProvider.dart';
 import 'package:flutter_firstsourceio/db/repo/ContactsRepositoryImpl.dart';
@@ -72,6 +73,8 @@ class _ContactsListTabState extends State<ContactsListTab> {
                       contact: contact,
                       onEdit: (c) {
                         print('editing $c');
+                        Navigator.of(context).pushNamed('/new_contact',
+                            arguments: AddContactArgs(0, c));
                       },
                       onRemove: (theRemovingContact) {
                         contactsRepo
