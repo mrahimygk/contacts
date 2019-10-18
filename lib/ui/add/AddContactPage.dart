@@ -156,7 +156,6 @@ class _AddContactPageState extends State<AddContactPage> {
                           child: Text('Save'),
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
-                              //TODO: save and finish
                               print('validated');
                               _saveContact();
                             }
