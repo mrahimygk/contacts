@@ -9,12 +9,12 @@ class ContactsListTab extends StatefulWidget {
 }
 
 class _ContactsListTabState extends State<ContactsListTab> {
-  final cRepo = ContactsRepositoryImpl(DatabaseProvider.get);
+  final contactsRepo = ContactsRepositoryImpl(DatabaseProvider.get);
   ScrollController scrollController;
 
   @override
   void initState() {
-    cRepo.getContactsFromNetwork();
+    contactsRepo.getContactsFromNetwork();
     scrollController = ScrollController();
     scrollController.addListener(_scrollListener);
     super.initState();
@@ -23,7 +23,7 @@ class _ContactsListTabState extends State<ContactsListTab> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Contact>>(
-        future: cRepo.getContactsFromDb(),
+        future: contactsRepo.getContactsFromDb(),
         builder: (context, inStream) {
           if (!inStream.hasData) {
             return Center(
@@ -31,7 +31,7 @@ class _ContactsListTabState extends State<ContactsListTab> {
             );
           }
           final data = inStream.data;
-          data.sort((a, b) => a.id.hashCode.compareTo(b.id.hashCode));
+          data.sort((a, b) => a.firstName.compareTo(b.firstName));
           return ListView(
             controller: scrollController,
             padding: EdgeInsets.all(6.0),
@@ -41,22 +41,29 @@ class _ContactsListTabState extends State<ContactsListTab> {
                       onEdit: (c) {
                         print('editing $c');
                       },
-                      onRemove: (c) {
-                        cRepo.removeContact(c).then((f) {
-                          cRepo.delete(c).then((cn) {
+                      onRemove: (theRemovingContact) {
+                        contactsRepo
+                            .removeContact(theRemovingContact)
+                            .then((f) {
+                          contactsRepo.delete(theRemovingContact).then((cn) {
                             setState(() {});
                             Scaffold.of(context).showSnackBar(SnackBar(
                               content: Row(
                                 children: <Widget>[
                                   Expanded(
                                     child: Text(
-                                        'Contact ${c.firstName} ${c.lastName} removed'),
+                                        'Contact ${theRemovingContact.firstName} ${theRemovingContact.lastName} removed'),
                                   ),
                                   Expanded(
                                     child: FlatButton(
                                       child: Text('Undo'),
                                       onPressed: () {
-                                        cRepo.insert(c);
+                                        contactsRepo
+                                            .insert(theRemovingContact)
+                                            .then((g) {
+                                          contactsRepo
+                                              .insertApi(theRemovingContact);
+                                        });
                                         setState(() {});
                                       },
                                     ),
@@ -77,7 +84,7 @@ class _ContactsListTabState extends State<ContactsListTab> {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
       print('reached the end: asking new items');
-      cRepo.getContactsFromNetwork().then((onValue) {
+      contactsRepo.getContactsFromNetwork().then((onValue) {
         setState(() {});
       });
     }

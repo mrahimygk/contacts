@@ -85,8 +85,12 @@ class ContactsRepositoryImpl implements ContactsRepository {
     return data;
   }
 
-  Future removeContact(Contact c) async {
-    return await dio.delete("$CONTACTS_URL/${c.id.toString()}");
+  Future removeContact(Contact data) async {
+    return await dio.delete("$CONTACTS_URL/${data.id.toString()}");
+  }
+
+  Future insertApi(Contact data) async {
+    return await dio.post(CONTACTS_URL, data: data.toMap());
   }
 }
 
