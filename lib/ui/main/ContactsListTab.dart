@@ -35,14 +35,7 @@ class _ContactsListTabState extends State<ContactsListTab> {
             controller: scrollController,
             padding: EdgeInsets.all(6.0),
             children: inStream.data
-                .map(
-                  (contact) => Dismissible(
-                    key: Key(contact.hashCode.toString()),
-                    child: ContactsCard(
-                      contact: contact,
-                    ),
-                  ),
-                )
+                .map((contact) => ContactsCard(contact: contact))
                 .toList(),
           );
         });
